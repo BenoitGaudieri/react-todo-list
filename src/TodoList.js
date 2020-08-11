@@ -1,71 +1,77 @@
-import React, { Component } from 'react';
-import NewTodoForm from './NewTodoForm.js';
-import TodoEdit from './TodoEdit.js';
-import './Todolist.css';
+import React, { Component } from "react";
+import Todo from "./Todo";
+import NewTodoForm from "./NewTodoForm";
+import "./Todolist.css";
 
 export default class TodoList extends Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			todo: []
-		};
-		this.addItem = this.addItem.bind(this);
-		this.update = this.update.bind(this);
-		this.toggleTodo = this.toggleTodo.bind(this);
-	}
+    constructor(props) {
+        super(props);
+        this.state = {
+            todos: [],
+        };
 
-	addItem(new_item) {
-		this.setState({
-			todo: [ ...this.state.todo, new_item ]
-		});
-	}
+        // Functions binds
+        this.create = this.create.bind(this);
+        this.remove = this.remove.bind(this);
+        this.update = this.update.bind(this);
+        this.toggleCompletion = this.toggleCompletion.bind(this);
+    }
 
-	remove(id) {
-		this.setState({
-			todo: this.state.todo.filter((todo) => todo.id !== id)
-		});
-	}
+    create(newTodo) {
+        this.setState({
+            todos: [...this.state.todos, newTodo],
+        });
+    }
 
-	update(id, updatedTodo) {
-		const updatedTodos = this.state.todo.map((todo) => {
-			if (todo.id === id) {
-				/* it unpacks the todo so we don't lose the id, then reassign the todo (the "task" passed by the form) only to the new todo.  */
-				return { ...todo, todo: updatedTodo };
-			}
-			return todo;
-		});
-		this.setState({ todo: updatedTodos });
-	}
+    remove(id) {
+        this.setState({
+            todos: this.state.todos.filter((t) => t.id !== id),
+        });
+    }
 
-	toggleTodo(id) {
-		const toggleComplete = this.state.todo.map((todo) => {
-			if (todo.id === id) {
-				return { ...todo, completed: !todo.completed };
-			}
-			return todo;
-		});
-		this.setState({ todo: toggleComplete });
-	}
+    update(id, updatedTask) {
+        const updatedTodos = this.state.todos.map((todo) => {
+            if (todo.id === id) {
+                return { ...todo, task: updatedTask };
+            }
+            return todo;
+        });
+        this.setState({ todos: updatedTodos });
+    }
 
-	render() {
-		const todos = this.state.todo.map((todo) => (
-			<TodoEdit
-				{...todo}
-				key={todo.id}
-				update={this.update}
-				toggleTodo={this.toggleTodo}
-				remove={() => this.remove(todo.id)}
-			/>
-		));
+    toggleCompletion(id) {
+        const updatedTodos = this.state.todos.map((todo) => {
+            if (todo.id === id) {
+                return { ...todo, completed: !todo.completed };
+            }
+            return todo;
+        });
+        this.setState({ todos: updatedTodos });
+    }
 
-		return (
-			<div className="todolist">
-				<h1>
-					Todo List <span>A simple Todo List App made with React</span>{' '}
-				</h1>
-				{todos}
-				<NewTodoForm addItem={this.addItem} />
-			</div>
-		);
-	}
+    render() {
+        const todos = this.state.todos.map((todo) => {
+            return (
+                <Todo
+                    key={todo.id}
+                    id={todo.id}
+                    task={todo.task}
+                    completed={todo.completed}
+                    removeTodo={this.remove}
+                    updateTodo={this.update}
+                    toggleTodo={this.toggleCompletion}
+                />
+            );
+        });
+        return (
+            <div className="todolist">
+                <h1>
+                    Todo list
+                    <span>Your todos in a simple React Todo List App</span>
+                </h1>
+                <ul>{todos}</ul>
+                <NewTodoForm createTodo={this.create} />
+            </div>
+        );
+    }
 }
