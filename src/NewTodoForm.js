@@ -14,15 +14,18 @@ export default class NewTodoForm extends Component {
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
+    // the React form logic to write value in the state
     handleChange(evt) {
         this.setState({
             [evt.target.name]: evt.target.value,
         });
     }
 
+    // use the parent createTodo to pass a new todo with the setted task, id from uuid and set completed state to false.
     handleSubmit(evt) {
         evt.preventDefault();
         this.props.createTodo({ ...this.state, id: uuid(), completed: false });
+        // empty the field
         this.setState({ task: "" });
     }
 

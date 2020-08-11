@@ -17,6 +17,7 @@ export default class TodoList extends Component {
         this.toggleCompletion = this.toggleCompletion.bind(this);
     }
 
+    // Functions to pass to children components
     create(newTodo) {
         this.setState({
             todos: [...this.state.todos, newTodo],
@@ -32,6 +33,7 @@ export default class TodoList extends Component {
     update(id, updatedTask) {
         const updatedTodos = this.state.todos.map((todo) => {
             if (todo.id === id) {
+                // change only the matching task with the updatedTask and return everything else (in this case the id)
                 return { ...todo, task: updatedTask };
             }
             return todo;
@@ -39,6 +41,7 @@ export default class TodoList extends Component {
         this.setState({ todos: updatedTodos });
     }
 
+    // Class toggle
     toggleCompletion(id) {
         const updatedTodos = this.state.todos.map((todo) => {
             if (todo.id === id) {

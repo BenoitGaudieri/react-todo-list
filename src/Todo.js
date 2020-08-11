@@ -8,6 +8,8 @@ export default class Todo extends Component {
             isEditing: false,
             task: this.props.task,
         };
+
+        // Functions binds
         this.handleRemove = this.handleRemove.bind(this);
         this.toggleForm = this.toggleForm.bind(this);
         this.handleUpdate = this.handleUpdate.bind(this);
@@ -19,6 +21,7 @@ export default class Todo extends Component {
         this.props.removeTodo(this.props.id);
     }
 
+    // toggle the form visualization
     toggleForm() {
         this.setState({ isEditing: !this.state.isEditing });
     }
@@ -30,6 +33,7 @@ export default class Todo extends Component {
         this.setState({ isEditing: false });
     }
 
+    // the React form logic to write value in the state
     handleChange(evt) {
         this.setState({
             [evt.target.name]: evt.target.value,
